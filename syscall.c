@@ -5,8 +5,7 @@
 #include <linux/unistd.h>	/* The list of system calls */
 #include <linux/string.h>
 #include <linux/slab.h>
-//#include <asm/semaphore.h>
-//#include <asm/cacheflush.h>
+
 #define CR0_WRITE_PROTECT   (1 << 16)
 
 
@@ -28,39 +27,39 @@ unsigned long *sys_call_table = (unsigned long *) 0xffffffff81e001e0;
 
 
 
-static uint64_t
-get_cr0(void)
-{
-    uint64_t ret;
+// static uint64_t
+// get_cr0(void)
+// {
+//     uint64_t ret;
 
-    __asm__ volatile (
-        "movq %%cr0, %[ret]"
-        : [ret] "=r" (ret)
-    );
+//     __asm__ volatile (
+//         "movq %%cr0, %[ret]"
+//         : [ret] "=r" (ret)
+//     );
     
-    return ret;
-}
+//     return ret;
+// }
 
-static void
-set_cr0(uint64_t cr0)
-{
-    __asm__ volatile (
-        "movq %[cr0], %%cr0"
-        :
-        : [cr0] "r" (cr0)
-    );
-}
+// static void
+// set_cr0(uint64_t cr0)
+// {
+//     __asm__ volatile (
+//         "movq %[cr0], %%cr0"
+//         :
+//         : [cr0] "r" (cr0)
+//     );
+// }
 
 
 
-void set_addr_rw(unsigned long addr) {
+// void set_addr_rw(unsigned long addr) {
 
-    unsigned int level;
-    pte_t *pte = lookup_address(addr, &level);
+//     unsigned int level;
+//     pte_t *pte = lookup_address(addr, &level);
 
-    if (pte->pte &~ _PAGE_RW) pte->pte |= _PAGE_RW;
+//     if (pte->pte &~ _PAGE_RW) pte->pte |= _PAGE_RW;
 
-}
+// }
 
 
 inline void mywrite_cr0(unsigned long cr0) {
@@ -77,8 +76,8 @@ void enable_write_protection(void) {
 
 void disable_write_protection(unsigned long place_to_write) {
   printk(KERN_INFO "disable write protection");
-  set_addr_rw(place_to_write);
-  set_cr0(get_cr0() & ~CR0_WRITE_PROTECT);
+//   set_addr_rw(place_to_write);
+//   set_cr0(get_cr0() & ~CR0_WRITE_PROTECT);
   unsigned long cr0 = read_cr0();
   clear_bit(16, &cr0);
   mywrite_cr0(cr0);
