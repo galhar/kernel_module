@@ -1,0 +1,1 @@
+rm *.ko *.o syscall.mod.c syscall.o.ur-safe modules.order Module.symvers syscall.o
